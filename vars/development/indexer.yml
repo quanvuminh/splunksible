@@ -1,0 +1,14 @@
+---
+replica_port: 8080
+
+# Indexes configuration for Production Environment
+minFreeSpace: 200000
+maxTotalDataSizeMB_default: 50000 # 50GB
+data_dir: /splunkdata
+maxVolumeDataSizeMB_data_dir: 14000000 # 14TB
+all_DBs:
+- name: vccloud
+  name_db: vcclouddb
+  maxTotalDataSizeMB: 15000000
+  maxDataSize: auto_high_volume
+  maxWarmDBCount: 30

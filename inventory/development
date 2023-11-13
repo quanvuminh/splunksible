@@ -1,0 +1,13 @@
+[search-head]
+dev-head.splunk.domain.ltd
+
+[master]
+dev-master.splunk.domain.ltd
+
+[indexer]
+dev-idx1.splunk.domain.ltd
+dev-idx2.splunk.domain.ltd
+dev-idx3.splunk.domain.ltd
+
+[all:vars]
+environment="development"

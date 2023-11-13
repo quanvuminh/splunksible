@@ -1,0 +1,28 @@
+#
+# Default configurations
+#
+[default]
+maxTotalDataSizeMB = {{ maxTotalDataSizeMB_default }}
+
+#
+# Storage for cold buckets of all non-internal index
+#
+[volume:extendable]
+path = {{ data_dir }}
+maxVolumeDataSizeMB = {{ maxVolumeDataSizeMB_data_dir }}
+
+#
+# Per index configurations
+#
+{% for db in all_DBs %}
+[{{db.name}}]
+repFactor = auto
+enableDataIntegrityControl = true
+homePath = volume:extendable/{{db.name_db}}/db
+coldPath = volume:extendable/{{db.name_db}}/colddb
+thawedPath = volume:extendable/{{db.name_db}}/thaweddb
+maxTotalDataSizeMB = {{db.maxTotalDataSizeMB}}
+maxDataSize =  {{db.maxDataSize}}
+maxWarmDBCount = {{db.maxWarmDBCount}}
+
+{% endfor %}

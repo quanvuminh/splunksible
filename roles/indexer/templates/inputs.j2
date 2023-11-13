@@ -1,0 +1,21 @@
+{% for db in all_DBs %}
+{% for port in db.receiv_ports %}
+{% if db.splunk_tcp == true %}
+[splunktcp://:{{ port.num }}]
+{% else %}
+[tcp://{{ port.num }}]
+{% endif %}
+disabled = false
+{% if port.host == "ip" or port.host == "dns" %}
+connection_host = {{ port.host }}
+{% else %}
+connection_host = none
+host = {{ port.host }}
+{% endif %}
+{% if port.src_type is defined %}
+sourcetype = {{ port.src_type }}
+{% endif %}
+index = {{ db.name }}
+
+{% endfor %}
+{% endfor %}

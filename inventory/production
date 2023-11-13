@@ -1,0 +1,13 @@
+[search-head]
+head.splunk.domain.ltd
+
+[master]
+master.splunk.domain.ltd
+
+[indexer]
+idx1.splunk.domain.ltd
+idx2.splunk.domain.ltd
+idx3.splunk.domain.ltd
+
+[all:vars]
+environment="production"

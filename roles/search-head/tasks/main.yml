@@ -1,0 +1,8 @@
+---
+
+# Enable Search head
+- include_tasks: enable.yml
+
+# Tune Splunk system
+- include_tasks: tune.yml
+  when: splunk_tunning

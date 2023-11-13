@@ -1,0 +1,38 @@
+---
+
+- name: Assures Cold path for all indexes
+  file: >
+    path="{{prod_env.cold_partition}}/{{item[0].name_db}}/{{item[1]}}"
+    state=directory
+    owner=root
+    group=root
+    mode=0744
+  with_nested:
+    - "{{prod_env.all_DBs}}"
+    - ['colddb', 'thaweddb']
+  tags:
+    - change_indexes_conf
+
+- name: configure indexes policy
+  template: >
+    src=indexes.j2
+    dest=/opt/splunk/etc/system/local/indexes.conf
+    owner=root
+    group=root
+    mode=0600
+  notify:
+    - restart splunk
+  tags:
+    - change_indexes_conf
+
+- name: configure receiving
+  template: >
+    src=inputs.j2
+    dest=/opt/splunk/etc/system/local/inputs.conf
+    owner=root
+    group=root
+    mode=0600
+  notify:
+    - restart splunk
+  tags:
+    - change_inputs_conf

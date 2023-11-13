@@ -1,0 +1,4 @@
+---
+
+splunk_master_mgmt_port: 8089
+splunk_cluster_pass4Symmkey: "0b99e70e6e890dcc92740bcafb0662eff6b661776895a4670ad8fca836687c38"

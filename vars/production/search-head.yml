@@ -1,0 +1,4 @@
+---
+# Search limits
+splunk_base_max_searches: 32
+splunk_max_searches_per_cpu: 16

@@ -1,0 +1,9 @@
+---
+
+# SSL Configurations
+fwd_certs_dir: mysplunkforwarding
+splunk_fwd_ca: ca.pem
+splunk_fwd_priv: log.vccorp.vn.pem
+
+# DNS for Indexer (in Production)
+indexer_domain: indexer.log.cnht.vn

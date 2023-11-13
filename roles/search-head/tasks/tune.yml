@@ -1,0 +1,24 @@
+---
+
+# Limit concurrent searches in limits.conf
+- name: "Configure concurrent searches limit"
+  template: >
+    src: limits.j2
+    dest: "{{ splunk_home }}/etc/system/local/limits.conf"
+    owner: "{{ splunk_user }}"
+    group: "{{ splunk_user }}"
+    mode: "u=rw,g=r,o=r"
+  notify:
+    - restart splunk
+
+# Disable Transparent Huge Pages for tuning Splunk performance
+- name: "Tuning Transparent Huge Pages"
+  copy:
+    content: "{{ sys_kernel_thp }}"
+    dest: "{{ item }}"
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"
+  loop:
+    - "/sys/kernel/mm/transparent_hugepage/enabled"
+    - "/sys/kernel/mm/transparent_hugepage/defrag"

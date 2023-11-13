@@ -1,0 +1,29 @@
+---
+
+- name: check if Master node is up
+  wait_for: >
+    host="{{hostvars[groups['master'][0]]['ansible_ssh_host']}}"
+    port="{{hostvars[groups['master'][0]]['mgmt_port']}}"
+    delay=10
+    timeout=31
+    state=started
+
+- name: enable Search Peer node
+  template: >
+    src=server.j2
+    dest=/opt/splunk/etc/system/local/server.conf
+    owner=root
+    group=root
+    mode=0600
+  notify:
+    - restart splunk
+  tags:
+    - change_server_conf
+
+- name: disable Transparent Huge Pages
+  raw: "{{item}}"
+  with_items:
+    - echo never > /sys/kernel/mm/transparent_hugepage/enabled
+    - echo never > /sys/kernel/mm/transparent_hugepage/defrag
+  tags:
+    - disable_thp

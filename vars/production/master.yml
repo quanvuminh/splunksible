@@ -1,0 +1,11 @@
+---
+
+# Replication management
+replica_factor: 2
+search_factor: 2
+cluster_label: indexer_cnht
+
+# DNS for Indexer
+idx_domain: indexer.log.cnht.vn
+# Forwarding data to indexer
+idx_port_vccloud: 9998

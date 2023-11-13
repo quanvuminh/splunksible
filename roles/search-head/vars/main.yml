@@ -1,0 +1,11 @@
+---
+
+# Enable advance performance tunning
+splunk_tunning: True
+
+# More info http://docs.splunk.com/Documentation/Splunk/latest/Report/Configurethepriorityofscheduledreports#How_the_report_scheduler_determines_the_concurrent_scheduled_report_limit
+splunk_base_max_searches: 6
+splunk_max_searches_per_cpu: 1
+
+# More info https://docs.splunk.com/Documentation/Splunk/latest/ReleaseNotes/SplunkandTHP
+sys_kernel_thp: "never" # Values: always, madvise, never

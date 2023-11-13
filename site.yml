@@ -1,0 +1,30 @@
+---
+
+- include: pre-conditions.yml
+
+# Setup Distributed Envinronment
+- hosts: master
+  vars_files:
+    - "vars/{{ environment }}/all.yml"
+    - "vars/{{ environment }}/master.yml"
+  roles:
+    - role: master
+      tags: is_master
+
+- hosts: indexer
+  vars_files:
+    - "vars/{{ environment }}/all.yml"
+    - "vars/{{ environment }}/indexer.yml"
+  roles:
+    - role: search-peer
+      tags: is_search_peer
+    - role: indexer
+      tags: is_indexer
+
+- hosts: search-head
+  vars_files:
+    - "vars/{{ environment }}/all.yml"
+    - "vars/{{ environment }}/search-head.yml"
+  roles:
+    - role: search-head
+      tags: is_search_head}

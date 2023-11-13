@@ -1,0 +1,25 @@
+---
+
+- name: enable Master node
+  template: >
+    src=server.j2
+    dest=/opt/splunk/etc/system/local/server.conf
+    owner=root
+    group=root
+    mode=0600
+  notify:
+    - restart splunk
+  tags:
+    - change_server_conf
+
+- name: configure forwarding data to indexer
+  template: >
+    src="outputs.j2"
+    dest=/opt/splunk/etc/system/local/outputs.conf
+    owner=root
+    group=root
+    mode=0600
+  notify:
+    - restart splunk
+  tags:
+    - change_outputs_conf

@@ -1,0 +1,14 @@
+---
+
+# Configure Search Head in server.conf
+- name: "Enable Search Head"
+  template:
+    src: server.j2
+    dest: "{{ splunk_home }}/etc/system/local/server.conf"
+    owner: "{{ splunk_user }}"
+    group: "{{ splunk_user }}"
+    mode: "u=rw"
+  notify:
+    - restart splunk
+  tags:
+    - change_server_conf

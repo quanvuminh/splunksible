@@ -1,0 +1,5 @@
+---
+
+splunk_user: "splunk"
+splunk_home: "/opt/splunk"
+splunk_bin: "{{ splunk_home }}/bin/splunk"

@@ -1,0 +1,14 @@
+---
+
+- hosts: localhost
+  connection: local
+  tasks:
+    # Check and require certain Ansible version. You should document why that
+    # version is required, for instance:
+    #
+    # We require Ansible 2.6 or newer
+    - name: Check Ansible version
+      assert:
+        that: '(ansible_version.major, ansible_version.minor) >= (2, 6)'
+        msg: 'Please install the recommended version 2.6+. You have Ansible {{ ansible_version.string }}.'
+      run_once: yes

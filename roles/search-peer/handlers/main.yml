@@ -1,0 +1,4 @@
+---
+
+- name: restart splunk
+  raw: splunk restart

@@ -1,0 +1,89 @@
+---
+
+- hosts: master
+  tags: 
+    - upgrade_master_first
+  vars_files: 
+    - roles/u14_splunk/defaults/main.yml
+    - roles/u14_splunk/var/main.yml
+  handlers: 
+    - name: restart splunk
+      raw: /opt/splunk/bin/splunk restart
+  pre_tasks:
+    - name: check if Splunk is running
+      stat: path=/opt/splunk/bin/splunk
+      register: splunk
+    - name: stop Splunk
+      raw: /opt/splunk/bin/splunk stop
+      when: splunk.stat.exists
+  tasks:
+    - name: manually install Splunk with tar file
+      unarchive: >
+        src="roles/u14_splunk/files/{{splunk_tar}}"
+        dest=/opt
+        copy=yes
+    - name: change owner for Splunk directory
+      file: >
+        path=/opt/splunk
+        state=directory
+        recurse=yes
+        owner=root
+        group=root
+    - name: accept license
+      raw: /opt/splunk/bin/splunk start --accept-license --answer-yes
+  post_tasks:
+    - name: enable Maintenance mode on Master
+      raw: /opt/splunk/bin/splunk enable maintenance-mode -auth admin:changeme --answer-yes
+    - name: confirm Master entered maintenance mode
+      raw: /opt/splunk/bin/splunk show maintenance-mode -auth admin:{{admin_passwd|quote}}
+      register: show_maintn_mode
+      failed_when: show_maintn_mode.stdout.find('1') == -1
+    - debug: msg="Master node is in Maintenance mode"
+      when: show_maintn_mode.stdout.find('1') != -1
+    - name: extend the restart period to 1800 seconds
+      raw: /opt/splunk/bin/splunk edit cluster-config -restart_timeout 1800
+
+- hosts: search_peers:search_heads
+  serial: 1
+  tags: 
+    - rolling_upgrade_peers
+  vars_files: 
+    - roles/u14_splunk/defaults/main.yml
+  handlers: 
+    - name: restart splunk
+      raw: /opt/splunk/bin/splunk restart
+  pre_tasks:
+    - name: check if Splunk is running
+      stat: path=/opt/splunk/bin/splunk
+      register: splunk
+    - name: stop Splunk
+      raw: /opt/splunk/bin/splunk stop
+      when: splunk.stat.exists
+  tasks:
+    - name: manually install Splunk with tar file
+      unarchive: >
+        src="roles/u14_splunk/files/{{splunk_tar}}"
+        dest=/opt
+        copy=yes
+    - name: change owner for Splunk directory
+      file: >
+        path=/opt/splunk
+        state=directory
+        recurse=yes
+        owner=root
+        group=root
+    - name: accept license
+      raw: /opt/splunk/bin/splunk start --accept-license --answer-yes
+
+- hosts: master
+  tags:
+    - disable_maintn_mode
+  tasks: 
+    - name: enable Maintenance mode on Master
+      raw: /opt/splunk/bin/splunk disable maintenance-mode -auth admin:changeme
+    - name: confirm Master entered maintenance mode
+      raw: /opt/splunk/bin/splunk show maintenance-mode -auth admin:changeme
+      register: show_maintn_mode
+      failed_when: show_maintn_mode.stdout.find('0') == -1  
+    - debug: msg="Master node is not in Maintenance mode"
+      when: show_maintn_mode.stdout.find('0') != -1

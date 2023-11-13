@@ -1,0 +1,19 @@
+---
+
+- hosts: all
+  tasks:
+   - name: stop Splunk
+     command: /opt/splunk/bin/splunk stop
+     ignore_errors: yes
+     tags:
+       - stop
+
+   - name: remove Splunk package
+     command: dpkg -r splunk
+     tags:
+       - uninstall
+   
+   - name: clean Splunk directory
+     command: rm -rf /opt/splunk/
+     tags:
+       - clean_dir

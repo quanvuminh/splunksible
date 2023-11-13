@@ -1,0 +1,4 @@
+---
+
+# Enable Search peer node
+- include: enable_search_peer.yml tags=enable

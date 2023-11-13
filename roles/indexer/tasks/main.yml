@@ -1,0 +1,4 @@
+---
+
+# Configure indexes
+- include: configure_index.yml tags=configure_index

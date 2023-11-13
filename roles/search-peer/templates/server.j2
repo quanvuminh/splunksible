@@ -1,0 +1,12 @@
+[general]
+parallelIngestionPipelines = 2
+
+[diskUsage]
+minFreeSpace = {{ minFreeSpace }}
+
+[replication_port://{{ replica_port }}]
+
+[clustering]
+master_uri = https://{{ hostvars[groups['master'][0]]['ansible_ssh_host'] }}:{{ hostvars[groups['master'][0]]['mgmt_port'] }}
+mode = slave
+pass4SymmKey = {{ pass4Symmkey }}

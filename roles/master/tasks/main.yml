@@ -1,0 +1,4 @@
+---
+
+# Enable Master node
+- include: enable_master.yml tags=enable

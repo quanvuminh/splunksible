@@ -1,0 +1,4 @@
+---
+
+- name: restart splunk
+  command: "{{ splunk_bin }} restart"
